@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>發文與回應</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        body{
+            background-image: url(./image/Folio-Illustration-Karolis-Strautniekas-Untitled-Personal.jpg);
+            /* background-position:;  */
+
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            /* margin-top: 100px; */
+            margin-top: 40px;
+            
+            
+        }
+
+
+        
+        .container {
+            background-color: white;
+            max-width: 800px;
+            margin: 20px auto;
+            box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
+            border-radius: 8px;
+            padding-bottom: 20px;
+            opacity: 0.5 ;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+        }
+
+
+
+        .post-container {
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+            /* padding-bottom: 20px; */
+        }
+
+        .reply-container {
+            margin-top: 10px;
+            /* border-top: 1px solid #ccc; */
+            padding-top: 10px;
+            
+        }
+
+
+        .replyDiv {
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        .replyButton {
+            margin-top: 10px;
+        }
+
+
+        .reply-container{
+            position: relative;
+            
+        }
+
+        .replySubmit{
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-image: url(./image/send-message.png);
+            background-size: 22px 22px;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            right: 10px;
+            bottom: 5px;
+        }
+
+
+        .replySubmit:active{
+            border: transparent !important;
+            background-color: #ececec !important;
+        } 
+
+        .replySubmit:hover{
+            background-color: #ececec !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <a class="navbar-brand" href="#">Navbar</a>
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled">Disabled</a>
+              </li>
+            </ul>
+            <form class="d-flex">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+      </nav> -->
+
+
+
+
+
+    <div class="container" onclick="light()">
+        <div class="mb-3">
+            <label for="postTextarea" class="form-label"></label>
+            <textarea class="form-control" id="postTextarea" rows="3" placeholder="在想些什麼?....."></textarea>
+            <button id="postButton" class="btn btn-primary my-2 fw-bold">發佈</button>
+        </div>
+
+        <div id="postsContainer"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script>
+        const postTextarea = document.getElementById('postTextarea');
+        const postButton = document.getElementById('postButton');
+        const postsContainer = document.getElementById('postsContainer');
+
+        function createReplyElement(replyContent) {
+            const replyDiv = document.createElement('div');
+            replyDiv.classList.add('replyDiv');
+            replyDiv.innerHTML = `<p>→ ${replyContent}</p>`;
+            return replyDiv;
+        }
+
+        function addReply(event) {
+            if (event.key === 'Enter' || event.target.classList.contains('replySubmit')) {
+                const replyTextarea = event.target.previousElementSibling;
+                const replyContent = replyTextarea.value.trim();
+                if (replyContent) {
+                    const replyDiv = createReplyElement(replyContent);
+                    event.target.parentNode.insertBefore(replyDiv, replyTextarea);
+                    replyTextarea.value = '';
+                }
+            }
+        }
+
+        postButton.addEventListener('click', function () {
+            const postContent = postTextarea.value.trim();
+            if (postContent) {
+                const postDiv = document.createElement('div');
+                postDiv.classList.add('post-container');
+                postDiv.innerHTML = `
+                    <p>${postContent}</p>
+                    <div class="reply-container ">
+                        <textarea class="form-control mt-2 replyTextarea " rows="2" placeholder="留言....."></textarea>
+                        <button class="btn  mt-2 replySubmit"></button>
+                    </div>
+                `;
+                postsContainer.appendChild(postDiv);
+                postTextarea.value = '';
+            }
+        });
+
+        postsContainer.addEventListener('keypress', addReply);
+        postsContainer.addEventListener('click', addReply);
+
+        
+
+        
+
+        function light(){
+            const container = document.querySelector('.container');
+            container.style.opacity = '1';
+            
+            
+        }
+
+
+        document.addEventListener('click', function (event) {
+            const container = document.querySelector('.container');
+            if (!container.contains(event.target)) {
+                container.style.opacity = '0.5';
+            }
+            
+        });
+    </script>
+
+
+
+</body>
+
+</html>
